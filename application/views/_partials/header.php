@@ -54,6 +54,7 @@
 
 
     <script> var url_base = "<?= base_url()?>"; </script>
+    <script> var url_member = "<?= link_config("web_member")?>"; </script>
     <script> var level = "<?= $this->session->userdata('level')?>"; </script>
   </head>
   <body class="antialiased">

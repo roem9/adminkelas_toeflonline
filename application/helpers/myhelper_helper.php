@@ -98,3 +98,13 @@
 
         return $program;
     }
+
+    function link_config($link){
+        $CI =& get_instance();
+        $CI->db->from("config");
+        $CI->db->where(["field" => $link]);
+        
+        $link = $CI->db->get()->row_array();
+
+        return $link['value'];
+    }

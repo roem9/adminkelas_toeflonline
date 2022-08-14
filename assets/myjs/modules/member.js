@@ -135,7 +135,7 @@ function detail_kelas(id_member){
                 </span>
                 <span>
                     <div class="d-flex justify-content-start">
-                        <a href="`+url_base+`member/sertifikat/`+user.link+`" target="_blank" class="btn btn-sm btn-warning">`+icon("award", "", 20)+`</a>
+                        <a href="`+url_member+`/kelas/sertifikat/`+user.link+`" target="_blank" class="btn btn-sm btn-warning">`+icon("award", "", 20)+`</a>
                         `+btnDelete+`
                     </div>
                 </span>
