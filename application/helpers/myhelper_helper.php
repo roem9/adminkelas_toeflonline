@@ -1,7 +1,7 @@
 <?php
     function tablerIcon($icon, $margin = ""){
         return '
-            <svg width="24" height="24" class="alert-icon '.$margin.'">
+            <svg width="24" height="24" class="'.$margin.'">
                 <use xlink:href="'.base_url().'assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-'.$icon.'" />
             </svg>';
     }
@@ -107,4 +107,15 @@
         $link = $CI->db->get()->row_array();
 
         return $link['value'];
+    }
+
+    function waktuInbox($id_member, $id_kelas){
+        $CI =& get_instance();
+        $CI->db->from("inbox_kelas");
+        $CI->db->where(["id_member" => $id_member, "id_kelas" => $id_kelas], "DESC");
+        
+        $time = $CI->db->get()->row_array();
+
+        if($time) return date("h:i d-m-y", strtotime($time['tgl_input']));
+        else return "-";
     }

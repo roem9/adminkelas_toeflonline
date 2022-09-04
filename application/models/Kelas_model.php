@@ -60,8 +60,12 @@ class Kelas_model extends MY_Model {
                     '.tablerIcon("info-circle", "me-1").'
                     Detail Kelas
                 </a>
+                <a class="dropdown-item detailKelas" href="'.base_url().'kelas/inbox/$2" target="_blank">
+                    '.tablerIcon("send", "me-1").'
+                    Ruang Diskusi
+                </a>
             </div>
-            </span>', 'id_kelas');
+            </span>', 'id_kelas, md5(id_kelas)');
         return $this->datatables->generate();
     }
 
@@ -178,6 +182,35 @@ class Kelas_model extends MY_Model {
 
         $data = $this->edit_data("config", ["id" => $id], ["value" => $value]);
         return $data;
+    }
+
+    public function get_all_inbox(){
+        $id_member = $this->input->post("id_member");
+        $id_kelas = $this->input->post("id_kelas");
+        
+        $data = $this->get_all("inbox_kelas", ["id_kelas" => $id_kelas, "id_member" => $id_member], "id", "DESC");
+
+        return $data;
+    }
+
+    public function input_inbox(){
+        $data = [
+            "id_member" => $this->input->post("id_member"),
+            "id_kelas" => $this->input->post("id_kelas"),
+            "text" => $this->input->post("text"),
+            "tabel" => $this->input->post("tabel")
+        ];
+
+        $this->edit_data("kelas_member", ["id_member" => $data['id_member'], "id_kelas" => $data['id_kelas']], [
+            "baca_member" => 0,
+            "baca_admin" => 1,
+            "refresh_member" => 0,
+            "refresh_admin" => 1
+        ]);
+
+        $query = $this->add_data("inbox_kelas", $data);
+        if($query) return 1;
+        else return 0;
     }
 }
  

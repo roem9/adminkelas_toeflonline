@@ -87,6 +87,73 @@ class Kelas extends MY_Controller {
 
         $this->load->view("pages/kelas/wl", $data);
     }
+
+    public function inbox($id_kelas){
+        $data['kelas'] = $this->kelas->get_one("kelas", ["md5(id_kelas)" => $id_kelas]);
+ 
+        // for title and header 
+        $data['title'] = "Ruang Diskusi " . $data['kelas']['nama_kelas'];
+        
+        $this->db->from("kelas_member as a");
+        $this->db->join("member as b", "a.id_member = b.id_member");
+        $this->db->where(["a.hapus" => "0", "md5(id_kelas)" => $id_kelas]);
+        $data['member'] = $this->db->get()->result_array();
+        
+        // javascript 
+        $data['js'] = [
+            "ajax.js",
+            "function.js",
+            "helper.js",
+            "setting.js",
+            // "load_data/wl_reload.js",
+            // "modules/wl.js",
+        ];
+
+        $this->load->view("pages/kelas/inbox", $data);
+    }
+
+    public function inbox_peserta($id_kelas, $id_member){
+        $data['member'] = $this->kelas->get_one("member", ["md5(id_member)" => $id_member]);
+        $data['kelas'] = $this->kelas->get_one("kelas", ["md5(id_kelas)" => $id_kelas]);
+
+        $data['title'] = $data['member']['nama'] . " | " . $data['kelas']['nama_kelas'];
+
+        // edit baca member = 1
+        $this->kelas->edit_data("kelas_member", ["md5(id_member)" => $id_member, "md5(id_kelas)" => $id_kelas], ["baca_admin" => 1, "refresh_admin" => 1]);
+
+        $data['js'] = [
+            "ajax.js",
+            "function.js",
+            "helper.js",
+            "modules/inbox.js",
+            "load_data/inbox_reload.js",
+        ];
+
+        $this->load->view("pages/kelas/inbox_peserta", $data);
+    }
+
+    public function get_all_inbox(){
+        $data = $this->kelas->get_all_inbox();
+        echo json_encode($data);
+    }
+
+    public function input_inbox(){
+        $data = $this->kelas->input_inbox();
+        echo json_encode($data);
+    }
+
+    public function check_msg(){
+        $id_kelas = $this->input->post("id_kelas");
+        $id_member = $this->input->post("id_member");
+
+        $msg = $this->kelas->get_one("kelas_member", ["id_kelas" => $id_kelas, "id_member" => $id_member]);
+        if($msg['refresh_admin'] == 0){
+            $this->kelas->edit_data("kelas_member", ["id_kelas" => $id_kelas, "id_member" => $id_member], ["refresh_admin" => 1, "baca_admin" => 1]);
+            echo json_encode(1);
+        } else {
+            echo json_encode(0);
+        }
+    }
     
     public function load_kelas(){
         header('Content-Type: application/json');
