@@ -16,7 +16,7 @@
                         <label class="col-form-label">Nama Member</label>
                     </div>
                     <div class="form-floating mb-3">
-                        <input type="text" name="t4_lahir" class="form form-control form-control-sm required">
+                        <input type="text" name="t4_lahir" class="form form-control form-control-sm">
                         <label class="col-form-label">Tempat Lahir</label>
                     </div>
                     <div class="form-floating mb-3">
@@ -81,7 +81,7 @@
                                     <label class="col-form-label">Nama Member</label>
                                 </div>
                                 <div class="form-floating mb-3">
-                                    <input type="text" name="t4_lahir" class="form form-control form-control-sm required">
+                                    <input type="text" name="t4_lahir" class="form form-control form-control-sm">
                                     <label class="col-form-label">Tempat Lahir</label>
                                 </div>
                                 <div class="form-floating mb-3">
