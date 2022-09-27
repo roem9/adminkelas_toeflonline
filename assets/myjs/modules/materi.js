@@ -510,7 +510,7 @@ $(document).on("click", ".editMateri", function(){
 
         $(form+" .modal-body").html(html);
         CKEDITOR.replace('form-text-edit');
-    } else if(result.item == "video"){
+    } else if(result.item == "video" || result.item == "video pembahasan"){
         html = `
         <div class="form-floating mb-3">
             <textarea name="link" class="form form-control required" data-bs-toggle="autosize" placeholder="Type something…">`+result.data+`</textarea>
