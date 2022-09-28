@@ -117,6 +117,7 @@ class Kelas extends MY_Controller {
         $data['member'] = $this->kelas->get_one("member", ["md5(id_member)" => $id_member]);
         $data['kelas'] = $this->kelas->get_one("kelas", ["md5(id_kelas)" => $id_kelas]);
 
+        $data['menu'] = "ruangDiskusi";
         $data['title'] = $data['member']['nama'] . " | " . $data['kelas']['nama_kelas'];
 
         // edit baca member = 1
