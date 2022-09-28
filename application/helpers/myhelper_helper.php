@@ -119,3 +119,20 @@
         if($time) return date("h:i d-m-y", strtotime($time['tgl_input']));
         else return "-";
     }
+
+    function jumlah_soal($id_pertemuan){
+        $CI =& get_instance();
+        $CI->db->from("latihan_pertemuan");
+        $CI->db->where("id_pertemuan = '$id_pertemuan' AND (item = 'soal' OR item = 'soal esai')");
+        
+        $soal = $CI->db->get()->result_array();
+        return COUNT($soal);
+    }
+
+    function poin_toefl($tipe, $soal){
+        $CI =& get_instance();
+        $CI->db->from("nilai_toefl");
+        $CI->db->where(["tipe" => $tipe, "soal" => $soal]);
+        $data = $CI->db->get()->row_array();
+        return $data['poin'];
+    }

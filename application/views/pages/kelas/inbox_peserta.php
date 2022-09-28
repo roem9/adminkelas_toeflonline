@@ -10,7 +10,14 @@
             <div class="page-header d-print-none">
                 <div class="row align-items-center">
                 <div class="col">
-                    <a href="<?= base_url()?>kelas/inbox/<?= md5($kelas['id_kelas'])?>">Ruang Diskusi</a> > TOEFL STRUCTURE 1 AGUSTUS 2022 | Muhammad Rum
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a href="<?= base_url()?>kelas/inbox/<?= md5($kelas['id_kelas'])?>">Ruang Diskusi</a> > TOEFL STRUCTURE 1 AGUSTUS 2022 | Muhammad Rum
+                        </div>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-primary btnReportLatihan .modal-body" data-bs-toggle="modal" data-bs-target="#reportLatihan">
+                            <?= tablerIcon("file-analytics");?>
+                        </a>
+                    </div>
                     <!-- <center><h3><?= $title?></h3></center> -->
                 </div>
                 <!-- Page title actions -->
@@ -69,5 +76,39 @@
         endif;    
     ?>
 
-    
+    <script>
+        $(".btnReportLatihan").click(function(){
+            let form = "#reportLatihan .modal-body";
+            let data = {id_kelas: id_kelas, id_member:id_member};
+            let result = ajax(url_base+"kelas/get_report_latihan", "POST", data);
+
+            if(result.length > 0){
+                let html = "";
+                result.forEach((data, i) => {
+                    html += `<li class="list-group-item d-flex justify-content-between">
+                                <span>
+                                    `+data.nama_pertemuan+`<br>
+                                </span>
+                                <span>
+                                    <a href="`+url_base+`kelas/latihan/`+id_kelas+`/`+data.id_pertemuan+`/`+id_member+`" target="_blank" class="btn btn-sm btn-info">`+data.nilai+`</a>
+                                </span>
+                            </li>`;
+                });
+
+                $(form).html(html);
+            } else {
+                $(form).html(`
+                    <div class="alert alert-important alert-warning alert-dismissible" role="alert">
+                        <div class="d-flex">
+                            <div>
+                                `+icon("alert-circle", "me-2", 20)+`
+                            </div>
+                            <div>
+                                Report Latiha Kosong
+                            </div>
+                        </div>
+                    </div>`);
+            }
+        })
+    </script>
 <?php $this->load->view("_partials/footer")?>
