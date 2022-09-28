@@ -12,7 +12,7 @@
                 <div class="col">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <a href="<?= base_url()?>kelas/inbox/<?= md5($kelas['id_kelas'])?>">Ruang Diskusi</a> > TOEFL STRUCTURE 1 AGUSTUS 2022 | Muhammad Rum
+                            <a href="<?= base_url()?>kelas/inbox/<?= md5($kelas['id_kelas'])?>">Ruang Diskusi</a> > <?= $kelas['nama_kelas']?> | <?= $member['nama'];?>
                         </div>
                         <a href="javascript:void(0)" class="btn btn-sm btn-primary btnReportLatihan .modal-body" data-bs-toggle="modal" data-bs-target="#reportLatihan">
                             <?= tablerIcon("file-analytics");?>
@@ -104,7 +104,7 @@
                                 `+icon("alert-circle", "me-2", 20)+`
                             </div>
                             <div>
-                                Report Latiha Kosong
+                                Report Latihan Kosong
                             </div>
                         </div>
                     </div>`);
