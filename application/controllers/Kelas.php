@@ -92,6 +92,7 @@ class Kelas extends MY_Controller {
         $data['kelas'] = $this->kelas->get_one("kelas", ["md5(id_kelas)" => $id_kelas]);
  
         // for title and header 
+        $data['menu'] = "ruangDiskusi";
         $data['title'] = "Ruang Diskusi " . $data['kelas']['nama_kelas'];
         
         $this->db->from("kelas_member as a");
