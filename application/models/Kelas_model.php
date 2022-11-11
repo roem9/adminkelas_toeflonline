@@ -46,7 +46,8 @@ class Kelas_model extends MY_Model {
     public function load_kelas(){
         $status = $this->input->post("status");
         $this->datatables->select('a.id_kelas, a.status, DATE_FORMAT(tgl_mulai, "%d %M %Y") as tgl_mulai, nama_kelas, program,
-            (select COUNT(id) from kelas_member where a.id_kelas = id_kelas AND hapus = 0) as peserta');
+            (select COUNT(id) from kelas_member where a.id_kelas = id_kelas AND hapus = 0) as peserta,
+            (select COUNT(id) from kelas_member where a.id_kelas = id_kelas AND hapus = 0 AND no_doc != "") as sertifikat_peserta');
         $this->datatables->from('kelas as a');
         $this->datatables->where('a.status', $status);
         $this->datatables->add_column('menu','

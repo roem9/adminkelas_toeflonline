@@ -21,8 +21,8 @@ var datatable = $('#dataTable').DataTable({
         {"data": "tgl_mulai"},
         {"data": "nama_kelas"},
         {"data": "program"},
-        {"data": "peserta", render : function(data){
-            return "<center>"+data+"</center>"
+        {"data": "peserta", render : function(row, data, iDisplayIndex){
+            return "<center>"+iDisplayIndex.sertifikat_peserta+"/"+iDisplayIndex.peserta+"</center>"
         }},
         {"data": "menu", render : function (data) {
             if(jQuery.browser.mobile == true) return data

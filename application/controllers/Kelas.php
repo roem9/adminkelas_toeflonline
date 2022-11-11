@@ -291,7 +291,7 @@ class Kelas extends MY_Controller {
         $data['pertemuan'] = $pertemuan;
         $data['member'] = $this->kelas->get_one("member", ["id_member" => $id_member]);
 
-        $data['folder_admin'] = $this->kelas->get_one("config", ["field" => "folder_admin"]);
+        $data['web_admin'] = $this->kelas->get_one("config", ["field" => "web_admin"]);
         
         // latihan koreksi otomatis 
         if($pertemuan['latihan'] == "Koreksi Otomatis"){
