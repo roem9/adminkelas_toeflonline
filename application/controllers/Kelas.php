@@ -721,6 +721,113 @@ class Kelas extends MY_Controller {
             }
         }
     }
+
+    public function laporan_peserta(){
+        $kelas = $this->kelas->get_all("kelas", ["hapus" => 0], "id_kelas", "desc");
+        
+        $spreadsheet = new Spreadsheet;
+
+        $spreadsheet->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'LIST PESERTA')
+                    ->setCellValue('A2', 'No')
+                    ->setCellValue('B2', 'Nama Peserta')
+                    ->setCellValue('C2', 'No. HP')
+                    ->setCellValue('D2', 'Kelas');
+
+        $spreadsheet->getActiveSheet()->mergeCells('A2:A3')
+                    ->mergeCells('B2:B3')
+                    ->mergeCells('C2:C3')
+                    ->mergeCells('D2:D3')
+                    ->mergeCells('A1:D1');
+        $kolom = 4;
+        $nomor = 1;
+
+        foreach ($kelas as $kelas) {
+            $semua_peserta = $this->kelas->get_all("kelas_member", ["id_kelas" => $kelas['id_kelas'], "hapus" => 0]);
+            foreach($semua_peserta as $peserta) {
+                    $data_peserta = $this->kelas->get_one("member", ["id_member" => $peserta['id_member']]);
+    
+                    $spreadsheet->setActiveSheetIndex(0)
+                                ->setCellValue('A' . $kolom, $nomor)
+                                ->setCellValue('B' . $kolom, $data_peserta['nama'])
+                                ->setCellValue('C' . $kolom, "'{$data_peserta['no_hp']}")
+                                ->setCellValue('D' . $kolom, $kelas['nama_kelas']);
+    
+                    $kolom++;
+                    $nomor++;
+    
+            }
+        }
+
+        foreach(range('A','D') as $columnID) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Laporan Peserta.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+            
+    }
+
+    public function laporan_sertifikat(){
+        $kelas = $this->kelas->get_all("kelas", ["hapus" => 0], "id_kelas", "desc");
+        
+        $spreadsheet = new Spreadsheet;
+
+        $spreadsheet->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'LIST PESERTA')
+                    ->setCellValue('A2', 'No')
+                    ->setCellValue('B2', 'Sertifikat')
+                    ->setCellValue('C2', 'Nama Peserta')
+                    ->setCellValue('D2', 'No. HP')
+                    ->setCellValue('E2', 'Kelas');
+
+        $spreadsheet->getActiveSheet()->mergeCells('A2:A3')
+                    ->mergeCells('B2:B3')
+                    ->mergeCells('C2:C3')
+                    ->mergeCells('D2:D3')
+                    ->mergeCells('E2:E3')
+                    ->mergeCells('A1:E1');
+        $kolom = 4;
+        $nomor = 1;
+
+        foreach ($kelas as $kelas) {
+            $semua_peserta = $this->kelas->get_all("kelas_member", ["id_kelas" => $kelas['id_kelas'], "hapus" => 0, "no_doc != " => ""]);
+            foreach($semua_peserta as $peserta) {
+                    $data_peserta = $this->kelas->get_one("member", ["id_member" => $peserta['id_member']]);
+    
+                    $spreadsheet->setActiveSheetIndex(0)
+                                ->setCellValue('A' . $kolom, $nomor)
+                                ->setCellValue('B' . $kolom, $peserta['no_doc'])
+                                ->setCellValue('C' . $kolom, $data_peserta['nama'])
+                                ->setCellValue('D' . $kolom, "'{$data_peserta['no_hp']}")
+                                ->setCellValue('E' . $kolom, $kelas['nama_kelas']);
+    
+                    $kolom++;
+                    $nomor++;
+    
+            }
+        }
+
+        foreach(range('A','E') as $columnID) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Laporan Sertifikat Peserta.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+            
+    }
 }
  
 /* End of file Kelas.php */

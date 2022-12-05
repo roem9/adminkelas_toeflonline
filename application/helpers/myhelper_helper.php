@@ -136,3 +136,19 @@
         $data = $CI->db->get()->row_array();
         return $data['poin'];
     }
+
+    function totalPeserta(){
+        $CI =& get_instance();
+        $CI->db->from("kelas_member");
+        $CI->db->where(["hapus" => 0]);
+        $data = $CI->db->get()->result_array();
+        return count($data);
+    }
+
+    function totalSertifikat(){
+        $CI =& get_instance();
+        $CI->db->from("kelas_member");
+        $CI->db->where(["hapus" => 0, "no_doc !=" => ""]);
+        $data = $CI->db->get()->result_array();
+        return count($data);
+    }
