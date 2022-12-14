@@ -47,7 +47,7 @@
                         </a>
                     </div>
                 </li>
-                <li class="nav-item dropdown">
+                <li class="nav-item dropdown" id="Laporan">
                     <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false" >
                         <span class="nav-link-icon d-md-none d-lg-inline-block">
                             <svg width="24" height="24" class="me-3">
@@ -64,6 +64,9 @@
                         </a>
                         <a class="dropdown-item" href="<?= base_url()?>kelas/laporan_sertifikat">
                             Laporan Sertifikat
+                        </a>
+                        <a class="dropdown-item" id="laporanBulanan" href="<?= base_url()?>kelas/laporan_bulanan">
+                            Laporan Bulanan
                         </a>
                     </div>
                 </li>

@@ -213,6 +213,43 @@ class Kelas_model extends MY_Model {
         if($query) return 1;
         else return 0;
     }
+
+    function laporan_bulanan(){
+        $this->db->select("MONTH(tgl_mulai) as month, YEAR(tgl_mulai) as year");
+        $this->db->from("kelas");
+        $this->db->group_by("MONTH(tgl_mulai), YEAR(tgl_mulai)");
+        $this->db->order_by("tgl_mulai", "DESC");
+        $periode = $this->db->get()->result_array();
+
+        $classes = [];
+        foreach ($periode as $i => $periode) {
+            $classes[$i]['month'] = $periode['month'];
+            $classes[$i]['year'] = $periode['year'];
+            $classes[$i]['periode'] = date("F", mktime(0, 0, 0, $periode['month'] , 10)). " " . $periode['year'];
+            $this->db->from("kelas");
+            $this->db->where(["MONTH(tgl_mulai)" => $periode['month'], "YEAR(tgl_mulai)" => $periode['year'], "hapus" => 0]);
+            $class = $this->db->get()->result_array();
+
+            $classes[$i]['class'] = COUNT($class);
+            $classes[$i]['student'] = 0;
+            $classes[$i]['certificate'] = 0;
+            
+            foreach ($class as $class) {
+                $this->db->from("kelas_member");
+                $this->db->where(["id_kelas" => $class['id_kelas'], "hapus" => 0]);
+                $peserta = COUNT($this->db->get()->result_array());
+
+                $classes[$i]['student'] += $peserta;
+                
+                $this->db->from("kelas_member");
+                $this->db->where(["id_kelas" => $class['id_kelas'], "no_doc !=" => "", "hapus" => 0]);
+                $sertifikat = COUNT($this->db->get()->result_array());
+                $classes[$i]['certificate'] += $sertifikat;
+            }
+        }
+
+        return $classes;
+    }
 }
  
 /* End of file Kelas_model.php */

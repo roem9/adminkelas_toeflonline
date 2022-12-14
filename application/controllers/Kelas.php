@@ -828,6 +828,89 @@ class Kelas extends MY_Controller {
         $writer->save('php://output');
             
     }
+
+    public function laporan_bulanan() {
+        // navbar and sidebar
+        $data['menu'] = "Laporan";
+        $data['dropdown'] = "laporanBulanan";
+ 
+        // for title and header 
+        $data['title'] = "Laporan Bulanan";
+ 
+        // for modal 
+        $data['modal'] = [
+        ];
+        
+        // javascript 
+        $data['js'] = [
+            "ajax.js",
+            "function.js",
+            "helper.js",
+            "setting.js",
+        ];
+
+        $laporan = $this->kelas->laporan_bulanan();
+
+        $data['laporan'] = $laporan;
+
+        $this->load->view("pages/kelas/laporan_bulanan", $data);
+    }
+
+    public function cetak_laporan_bulanan($bulan, $tahun){
+        $kelas = $this->kelas->get_all("kelas", ["hapus" => 0, "MONTH(tgl_mulai)" => $bulan, "YEAR(tgl_mulai)" => $tahun], "id_kelas", "desc");
+        
+        $spreadsheet = new Spreadsheet;
+
+        $spreadsheet->setActiveSheetIndex(0)
+                    ->setCellValue('A1', 'LIST PESERTA')
+                    ->setCellValue('A2', 'No')
+                    ->setCellValue('B2', 'Nama Peserta')
+                    ->setCellValue('C2', 'No. HP')
+                    ->setCellValue('D2', 'Kelas')
+                    ->setCellValue('E2', 'Sertifikat');
+
+        $spreadsheet->getActiveSheet()->mergeCells('A2:A3')
+                    ->mergeCells('B2:B3')
+                    ->mergeCells('C2:C3')
+                    ->mergeCells('D2:D3')
+                    ->mergeCells('E2:E3')
+                    ->mergeCells('A1:D1');
+        $kolom = 4;
+        $nomor = 1;
+
+        foreach ($kelas as $kelas) {
+            $semua_peserta = $this->kelas->get_all("kelas_member", ["id_kelas" => $kelas['id_kelas'], "hapus" => 0]);
+            foreach($semua_peserta as $peserta) {
+                    $data_peserta = $this->kelas->get_one("member", ["id_member" => $peserta['id_member']]);
+                    $data_peserta['no_doc'] = $peserta['no_doc'];
+    
+                    $spreadsheet->setActiveSheetIndex(0)
+                                ->setCellValue('A' . $kolom, $nomor)
+                                ->setCellValue('B' . $kolom, $data_peserta['nama'])
+                                ->setCellValue('C' . $kolom, "'{$data_peserta['no_hp']}")
+                                ->setCellValue('D' . $kolom, $kelas['nama_kelas'])
+                                ->setCellValue('E' . $kolom, $data_peserta['no_doc']);
+    
+                    $kolom++;
+                    $nomor++;
+    
+            }
+        }
+
+        foreach(range('A','D') as $columnID) {
+            $spreadsheet->getActiveSheet()->getColumnDimension($columnID)
+                ->setAutoSize(true);
+        }
+
+        $writer = new Xlsx($spreadsheet);
+
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="Laporan Peserta '.$bulan.' '.$tahun.'.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+            
+    }
 }
  
 /* End of file Kelas.php */
