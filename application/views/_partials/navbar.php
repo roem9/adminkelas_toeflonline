@@ -47,6 +47,18 @@
                         </a>
                     </div>
                 </li>
+                <li class="nav-item" id="Inbox">
+                    <a class="nav-link" href="<?= base_url()?>inbox" role="button" aria-expanded="false" >
+                        <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <svg width="24" height="24" class="me-3">
+                                <use xlink:href="<?= base_url()?>assets/tabler-icons-1.39.1/tabler-sprite.svg#tabler-book" />
+                            </svg> 
+                        </span>
+                        <span class="nav-link-title">
+                            Inbox
+                        </span>
+                    </a>
+                </li>
                 <li class="nav-item dropdown" id="Laporan">
                     <a class="nav-link dropdown-toggle" href="#navbar-base" data-bs-toggle="dropdown" role="button" aria-expanded="false" >
                         <span class="nav-link-icon d-md-none d-lg-inline-block">

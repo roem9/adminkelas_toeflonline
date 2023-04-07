@@ -112,7 +112,8 @@
     function waktuInbox($id_member, $id_kelas){
         $CI =& get_instance();
         $CI->db->from("inbox_kelas");
-        $CI->db->where(["id_member" => $id_member, "id_kelas" => $id_kelas], "DESC");
+        $CI->db->where(["id_member" => $id_member, "id_kelas" => $id_kelas]);
+        $CI->db->order_by("tgl_input", "DESC");
         
         $time = $CI->db->get()->row_array();
 
